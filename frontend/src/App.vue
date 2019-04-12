@@ -1,10 +1,9 @@
 <template>
-  <div id="app">
-    <v-content>
-      <router-view/>
-    </v-content>
-  </div>
+  <v-app>
+    <router-view></router-view>
+  </v-app>
 </template>
 
-<style lang="scss">
-</style>
+<script>
+export default {};
+</script>
