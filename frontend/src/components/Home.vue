@@ -15,9 +15,15 @@
               <div class="subheading">{{ category.name }}</div>
               <div class="grey--text">{{ category.description }}</div>
             </v-card-text>
-            <v-card-actions class="right">
-              <v-btn color="primary" dark v-on="on">Wyszukaj</v-btn>
-            </v-card-actions>
+
+            <v-btn color="primary" dark @click.stop="dialog = true">Open</v-btn>
+            <v-dialog v-model="dialog" max-width="300">
+              <v-card>
+                <v-card-title class="headline">Wybierz</v-card-title>
+                <v-card-text>text</v-card-text>
+                <v-card-actions></v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card>
         </v-flex>
       </v-layout>
@@ -44,9 +50,14 @@
               <div class="subheading">{{ category.name }}</div>
               <div class="grey--text">{{ category.description }}</div>
             </v-card-text>
-            <v-card-actions>
-              <v-btn color="primary" dark v-on="on">Wyszukaj</v-btn>
-            </v-card-actions>
+            <v-btn color="primary" dark @click="dialog = true">Open</v-btn>
+            <v-dialog v-model="dialog" max-width="300">
+              <v-card>
+                <v-card-title class="headline">Wybierz</v-card-title>
+                <v-card-text>text</v-card-text>
+                <v-card-actions></v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-card>
         </v-flex>
       </v-layout>
