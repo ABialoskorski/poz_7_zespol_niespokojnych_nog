@@ -1,17 +1,7 @@
 <template>
   <v-toolbar class="navbar" fixed color="primary white--text">
-    <v-btn fab small :to="{
-        name: 'home'
-        }">
-      <v-icon>home</v-icon>
-    </v-btn>
     <v-spacer></v-spacer>
     <span class="navbar__price">Suma: {{this.allPrice}} zł</span>
-    <v-toolbar-items>
-      <v-btn class="white--text" flat :to="{
-        name: 'products'
-        }">Konfigurator</v-btn>
-    </v-toolbar-items>
   </v-toolbar>
 </template>
 
@@ -32,6 +22,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.navbar {
+  font-family: "Amika", sans-serif;
+}
 .navbar__price {
   font-size: 24px;
   margin-right: 40px;
