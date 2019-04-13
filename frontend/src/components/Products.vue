@@ -64,10 +64,11 @@
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
+        <button class="button" @click="move(-1)">lewo</button>
         <div
           class="modal__element"
           @click="choose(product)"
-          v-for="product in products"
+          v-for="product in slice(products)"
           :key="product.id"
         >
           <img :src="product.images[0].url">
@@ -79,6 +80,7 @@
             <a class="product__link" :href="product.link">Przeglądaj</a>
           </div>
         </div>
+        <button class="button" @click="move(1)">prawo</button>
       </div>
     </div>
   </div>
@@ -90,6 +92,9 @@ import EventBus from "@/EventBus.js";
 export default {
   data() {
     return {
+      start: 0,
+      amount: 3,
+      max: 21,
       allPrice: 0,
       on: true,
       dialog: false,
@@ -106,10 +111,10 @@ export default {
         this.dialog = false;
         return;
       }
-      fetch(`http://localhost:3000/search?category=${id}&limit=3`)
+      this.start = 0
+      fetch(`http://localhost:3000/search?category=${id}&limit=${this.max}`)
         .then(res => res.json())
         .then(body => {
-          console.log(body);
           this.products = body.map(e => {
             return Object.assign(e, { category: id });
           });
@@ -128,6 +133,12 @@ export default {
     priceSum(product) {
       this.allPrice += Number(product.price);
       EventBus.$emit("priceChange", this.allPrice);
+    },
+    move(direction) {
+      this.start = (this.start + this.max + direction * this.amount) % this.max
+    },
+    slice(array) {
+      return array.slice(this.start, this.start + this.amount)
     }
   },
   mounted() {
@@ -216,5 +227,8 @@ h2 {
   right: 0;
   left: 0;
   opacity: 0.9;
+}
+.button {
+  background: white;
 }
 </style>
