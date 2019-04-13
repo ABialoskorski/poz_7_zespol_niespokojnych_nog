@@ -63,8 +63,8 @@
 
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="dialog=false"></div>
-      <v-card class="modal" height="400px" width="400px">
-        <v-card>
+      <v-card class="modal">
+        <v-card class="modal__element" v-for="n in 3" :key="n=1">
           <v-img
             class="white--text"
             height="400px"
@@ -177,8 +177,14 @@ h2 {
 }
 .modal {
   position: fixed;
-  width: 50%;
-  height: 50%;
+  width: 80%;
+  height: 80%;
+  &__element {
+    display: inline-block;
+    //flex-direction: row;
+    width: 33.3%;
+    height: 33.3%;
+  }
 }
 .modal-background {
   background-color: black;
