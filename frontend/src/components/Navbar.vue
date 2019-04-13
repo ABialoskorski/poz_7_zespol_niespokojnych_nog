@@ -1,5 +1,6 @@
 <template>
   <v-toolbar class="navbar" fixed color="primary white--text">
+    <h1 class="product__title">PC Builder</h1>
     <v-spacer></v-spacer>
     <span class="navbar__price">Suma: {{this.allPrice}} zł</span>
   </v-toolbar>
