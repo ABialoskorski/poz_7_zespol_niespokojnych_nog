@@ -63,23 +63,28 @@
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
-        <button class="button" @click="move(-1)">lewo</button>
-        <div
-          class="modal__element"
-          @click="choose(product)"
-          v-for="product in slice(products)"
-          :key="product.id"
-        >
-          <img :src="product.images[0].url">
-          <v-card-title>
-            <span>{{product.name}}</span>
-          </v-card-title>
-          <div class="product__details">
-            <span class="product__price">{{product.price}} zł</span>
-            <a class="product__link" :href="product.link">Przeglądaj</a>
+        <input class="button" type="text" v-model="phrase" @input="debounceInput()">
+        <div class="flex-row">
+          <button class="button" @click="move(-1)">lewo</button>
+          <div class="flex-row">
+            <div
+              class="modal__element"
+              @click="choose(product)"
+              v-for="product in slice(products)"
+              :key="product.id"
+            >
+              <img :src="product.images[0].url">
+              <v-card-title>
+                <span>{{product.name}}</span>
+              </v-card-title>
+              <div class="product__details">
+                <span class="product__price">{{product.price}} zł</span>
+                <a class="product__link" :href="product.link">Przeglądaj</a>
+              </div>
+            </div>
           </div>
+          <button class="button" @click="move(1)">prawo</button>
         </div>
-        <button class="button" @click="move(1)">prawo</button>
       </div>
     </div>
   </div>
@@ -87,7 +92,7 @@
 
 <script>
 import EventBus from "@/EventBus.js";
-
+import debounce from 'debounce'
 export default {
   data() {
     return {
@@ -98,7 +103,9 @@ export default {
       on: true,
       dialog: false,
       products: [],
-      categories: []
+      categories: [],
+      category: null,
+      phrase: ''
     };
   },
   methods: {
@@ -110,15 +117,19 @@ export default {
         this.dialog = false;
         return;
       }
+      this.category = id
+      this.loadProducts()
+    },
+    loadProducts() {
       this.start = 0
-      fetch(`http://localhost:3000/search?category=${id}&limit=${this.max}`)
-        .then(res => res.json())
-        .then(body => {
-          this.products = body.map(e => {
-            return Object.assign(e, { category: id });
-          });
-          this.dialog = true;
+      fetch(`http://localhost:3000/search?category=${this.category}&limit=${this.max}&phrase=${this.phrase}`)
+      .then(res => res.json())
+      .then(body => {
+        this.products = body.map(e => {
+          return Object.assign(e, { category: this.category });
         });
+        this.dialog = true;
+      });
     },
     choose(product) {
       this.categories.find(e => {
@@ -138,6 +149,9 @@ export default {
     },
     slice(array) {
       return array.slice(this.start, this.start + this.amount)
+    },
+    debounceInput() {
+      debounce(this.loadProducts, 700)()
     }
   },
   mounted() {
@@ -195,13 +209,17 @@ h2 {
   justify-content: center;
   align-items: center;
 }
+.flex-row {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+}
 .modal {
   position: fixed;
   width: 82%;
   height: 82%;
-  display: flex;
-  justify-content: space-around;
   background: transparent;
+  display: flex;
   &__element {
     display: flex;
     padding: 30px;
