@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar color="primary" dark>
+  <v-toolbar fixed color="primary" dark>
     <v-btn fab small :to="{
         name: 'home'
         }">
