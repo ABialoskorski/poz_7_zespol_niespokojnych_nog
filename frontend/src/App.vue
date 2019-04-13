@@ -19,3 +19,9 @@ export default {
   }
 };
 </script>
+
+<style>
+  font-family: 'Amiko', sans-serif;
+  font-family: 'Rubik', sans-serif;
+
+</style>

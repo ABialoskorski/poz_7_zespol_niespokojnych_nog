@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="product">
-      <h1 class="product__title">Komponenty</h1>
+      <h1 class="product__title">PC Builder</h1>
       <v-container class="my-5">
         <h2 class="grey--text">Komponenty wymagane</h2>
         <v-layout row wrap>
