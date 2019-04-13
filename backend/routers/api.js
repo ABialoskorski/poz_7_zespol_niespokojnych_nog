@@ -34,7 +34,7 @@ router.get('/search', ensureToken, async (req, res) => {
 router.get('/categories', ensureToken, async (req, res) => {
   try {
     const url = 'https://api.allegro.pl/sale/categories'
-    const { data } = await axios.get(url, {
+    const { data: data1 } = await axios.get(url, {
       params: {
         'parent.id': '4226'
       },
@@ -43,7 +43,21 @@ router.get('/categories', ensureToken, async (req, res) => {
         Accept: 'application/vnd.allegro.public.v1+json'
       }
     })
-    return res.json(data.categories.map(c => {
+    const { data: data2 } = await axios.get(url, {
+      params: {
+        'parent.id': '4475'
+      },
+      headers: {
+        Authorization: 'Bearer ' + req.token.access_token,
+        Accept: 'application/vnd.allegro.public.v1+json'
+      }
+    })
+    const data = data1.categories.concat(data2.categories).filter(e => {
+      return !['pozostałe', 'serwisowy', 'przenośne', 'kieszenie', 'uszkodzone'].some(r => {
+        return e.name.toLowerCase().includes(r)
+      })
+    })
+    return res.json(data.map(c => {
       return {
         id: c.id,
         name: c.name
