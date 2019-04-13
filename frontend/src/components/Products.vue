@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="products">
-      <h1 class="products__title">Komponenty</h1>
+    <div class="product">
+      <h1 class="product__title">Komponenty</h1>
       <v-container class="my-5">
         <h2 class="grey--text">Komponenty wymagane</h2>
         <v-layout row wrap>
@@ -64,14 +64,20 @@
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
-        <div class="modal__element" @click="choose(product)" v-for="product in products" :key="product.id">
+        <div
+          class="modal__element"
+          @click="choose(product)"
+          v-for="product in products"
+          :key="product.id"
+        >
           <img :src="product.images[0].url">
           <v-card-title>
             <span>{{product.name}}</span>
           </v-card-title>
-          <v-card-actions>
+          <div class="product__details">
+            <span class="product__price">{{product.price}} zł</span>
             <a class="product__link" :href="product.link">Przeglądaj</a>
-          </v-card-actions>
+          </div>
         </div>
       </div>
     </div>
@@ -79,80 +85,16 @@
 </template>
 
 <script>
+import EventBus from "@/EventBus.js";
+
 export default {
   data() {
     return {
+      allPrice: 0,
       on: true,
       dialog: false,
       products: [],
-      categories: [
-        {
-          name: "GPU",
-          description: "Karta Graficzna",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "CPU",
-          description: "Procesor",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "PSU",
-          description: "Zasilacz",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "MOBO",
-          description: "Płyta Główna",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "RAM",
-          description: "Pamięć RAM",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "CASE",
-          description: "Obudowa",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "DISK",
-          description: "Dysk HDD/SSD",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "OS",
-          description: "System operacyjny",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "CD/DVD",
-          description: "Napęd optyczny",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "Wi-fi/Ethernet",
-          description: "Karta sieciowa",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "CPU Cooler",
-          description: "Chłodzenie CPU",
-          id: 260019,
-          required: false
-        }
-      ]
+      categories: []
     };
   },
   methods: {
@@ -165,44 +107,57 @@ export default {
         return;
       }
       fetch(`http://localhost:3000/search?category=${id}&limit=3`)
-      .then(res => res.json())
-      .then(body => {
-        console.log(body);
-        this.products = body.map(e => {
-          return Object.assign(e, { category: id })
+        .then(res => res.json())
+        .then(body => {
+          console.log(body);
+          this.products = body.map(e => {
+            return Object.assign(e, { category: id });
+          });
+          this.dialog = true;
         });
-        this.dialog = true
-      })
     },
     choose(product) {
       this.categories.find(e => {
-        return e.id === product.category
-      })
-      this.categories.find(e => e.id === product.category).avatar = product.images[0].url
-      this.openDialog(false)
+        return e.id === product.category;
+      });
+      this.categories.find(e => e.id === product.category).avatar =
+        product.images[0].url;
+      this.openDialog(false);
+      this.priceSum(product);
+    },
+    priceSum(product) {
+      this.allPrice += Number(product.price);
+      EventBus.$emit("priceChange", this.allPrice);
     }
   },
   mounted() {
     fetch(`http://localhost:3000/categories`)
-    .then(res => res.json())
-    .then(categories => {
-      this.categories = categories
-    })
+      .then(res => res.json())
+      .then(categories => {
+        this.categories = categories;
+      });
   }
 };
 </script>
 
 <style scoped lang="scss">
+.product__details {
+  display: flex;
+  flex-flow: column;
+  text-align: right;
+}
 .product__link {
   text-decoration: none;
   text-transform: uppercase;
   font-size: 18px;
 }
+.product__price {
+  font-size: 16px;
+}
 .v-card__title {
   font-size: 16px;
 }
 .products__title {
-  // margin-top: 50px;
   text-align: center;
   font-size: 50px;
 }
