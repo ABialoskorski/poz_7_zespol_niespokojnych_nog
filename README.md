@@ -4,3 +4,4 @@ Projekt PCBuilder do klikalnej konfiguracji komputera PC tworzony na hackatonie 
 - Artur Białoskórski
 - Konrad Linkowski
 - Konrad Baranek 
+
