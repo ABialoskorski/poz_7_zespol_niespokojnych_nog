@@ -124,11 +124,6 @@ router.get('/categories', ensureToken, async (req, res) => {
      "required": false
    },
    {
-     "id": "4551",
-     "name": "Listwy zasilające i UPS",
-     "required": false
-   },
-   {
      "id": "260735",
      "name": "Karty sieciowe",
      "required": false
