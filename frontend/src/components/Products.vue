@@ -12,10 +12,10 @@
             v-for="category in required(categories,true)"
             :key="category.name"
           >
-            <v-card flat class="text-xs-center ma-3">
+            <v-card v-if="!category.product" flat class="text-xs-center ma-3">
               <v-responsive class="pt-4">
                 <v-avatar size="90" class="grey lighten-2">
-                  <img :src="category.avatar">
+                  <img src="https://via.placeholder.com/100x100">
                 </v-avatar>
               </v-responsive>
               <v-card-text>
@@ -24,7 +24,21 @@
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
-                <v-btn color="secondary" dark @click="remove(true, category.id)">Usuń</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-card v-else flat class="text-xs-center ma-3">
+              <v-responsive class="pt-4">
+                <v-avatar size="90" class="grey lighten-2">
+                  <img :src="category.product.images[0].url">
+                </v-avatar>
+              </v-responsive>
+              <v-card-text>
+                <div class="subheading">{{ category.name }}</div>
+                <div class="grey--text">{{ category.description }}</div>
+              </v-card-text>
+              <v-card-actions class="right">
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn color="secondary" dark @click="remove(category)">Usuń</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -42,10 +56,10 @@
             v-for="category in required(categories,false)"
             :key="category.name"
           >
-            <v-card v-if="!category.required" flat class="text-xs-center ma-3">
+            <v-card v-if="!category.product" flat class="text-xs-center ma-3">
               <v-responsive class="pt-4">
                 <v-avatar size="90" class="grey lighten-2">
-                  <img :src="category.avatar">
+                  <img src="https://via.placeholder.com/100x100">
                 </v-avatar>
               </v-responsive>
               <v-card-text>
@@ -53,7 +67,22 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wyszukaj</v-btn>
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+              </v-card-actions>
+            </v-card>
+            <v-card v-else flat class="text-xs-center ma-3">
+              <v-responsive class="pt-4">
+                <v-avatar size="90" class="grey lighten-2">
+                  <img :src="category.product.images[0].url">
+                </v-avatar>
+              </v-responsive>
+              <v-card-text>
+                <div class="subheading">{{ category.name }}</div>
+                <div class="grey--text">{{ category.description }}</div>
+              </v-card-text>
+              <v-card-actions class="right">
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn color="secondary" dark @click="remove(category)">Usuń</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -110,6 +139,7 @@
         dialog: false,
         products: [],
         categories: [],
+        cart: [],
         category: null,
         phrase: ''
       };
@@ -138,16 +168,19 @@
           });
       },
       choose(product) {
-        this.categories.find(e => {
-          return e.id === product.category;
-        });
-        this.categories.find(e => e.id === product.category).avatar =
-          product.images[0].url;
+        const category = this.categories.find(e => e.id === product.category)
+        if (!category.product) {
+          this.cart.push(product)
+        } else {
+          const index = this.cart.findIndex(e => e.category === category.id)
+          this.cart[index] = product
+        }
+        this.$set(category, 'product', product)
         this.openDialog(false);
-        this.priceSum(product);
+        this.priceSum();
       },
-      priceSum(product) {
-        this.allPrice += Number(product.price);
+      priceSum() {
+        this.allPrice = this.cart.reduce((p, c) => p + Number(c.price), 0)
         EventBus.$emit("priceChange", this.allPrice);
       },
       move(direction) {
@@ -158,13 +191,20 @@
       },
       debounceInput() {
         debounce(this.loadProducts, 700)()
+      },
+      remove(category) {
+        const index = this.cart.findIndex(e => e.id === category.product.id)
+        this.cart.splice(index, 1)
+        const cat = this.categories.find(e => e.id === category.id)
+        this.$set(cat, 'product', undefined)
+        this.priceSum()
       }
     },
     mounted() {
       fetch(`http://localhost:3000/categories`)
         .then(res => res.json())
         .then(categories => {
-          this.categories = categories;
+          this.categories = categories
         });
     }
   };
