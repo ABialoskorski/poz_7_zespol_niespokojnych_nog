@@ -1,17 +1,8 @@
 <template>
   <v-toolbar class="navbar" fixed color="primary white--text">
-    <v-btn fab small :to="{
-        name: 'home'
-        }">
-      <v-icon>home</v-icon>
-    </v-btn>
+    <h1 class="product__title">PC Builder</h1>
     <v-spacer></v-spacer>
     <span class="navbar__price">Suma: {{this.allPrice}} zł</span>
-    <v-toolbar-items>
-      <v-btn class="white--text" flat :to="{
-        name: 'products'
-        }">Konfigurator</v-btn>
-    </v-toolbar-items>
   </v-toolbar>
 </template>
 
