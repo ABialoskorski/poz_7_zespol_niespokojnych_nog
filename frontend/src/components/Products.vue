@@ -78,8 +78,8 @@
               </v-responsive>
               <v-card-text>
                 <v-card-text>
-                <div class="subheading">{{ category.product.name }}</div>
-              </v-card-text>
+                  <div class="subheading">{{ category.product.name }}</div>
+                </v-card-text>
                 <div class="subheading">{{ category.name }}</div>
               </v-card-text>
               <v-card-actions class="right">
@@ -93,46 +93,47 @@
     </div>
 
     <div class="modal-container" v-if="dialog">
-      <input class="button" type="text" v-model="phrase" @input="debounceInput()">
-      <div class="modal-background" @click="openDialog(false)"></div>
-      <div class="modal">
-        <div style="width: 300px;">
-          <button class="button" @click="move(-1)">
-            <i class="left-arrow"></i>
-          </button>
-        </div>
-        <div class="flex-row">
+      <div class="flex-column">
+
+        <div class="modal-background" @click="openDialog(false)"></div>
+        <div class="modal">
+          <div style="width: 300px;">
+            <button class="button" @click="move(-1)"><i class="left-arrow"></i></button>
+          </div>
           <div class="flex-row">
-            <div
-              class="modal__element"
-              @click="choose(product)"
-              v-for="product in slice(products)"
-              :key="product.id"
-            >
-              <img :src="product.images[0].url">
-              <v-card-title>
-                <span>{{product.name}}</span>
-              </v-card-title>
-              <div class="product__details">
-                <span class="product__price">{{product.price}} zł</span>
-                <a class="product__link" :href="product.link" target="_blank">Przeglądaj</a>
+            <div class="flex-row">
+              <div
+                class="modal__element"
+                @click="choose(product)"
+                v-for="product in slice(products)"
+                :key="product.id"
+              >
+                <div class="img-container">
+                  <img :src="product.images[0].url">
+                </div>
+                <v-card-title>
+                  <span>{{product.name}}</span>
+                </v-card-title>
+                <div class="product__details">
+                  <span class="product__price">{{product.price}} zł</span>
+                  <a class="product__link" :href="product.link" target="_blank">Przeglądaj</a>
+                </div>
               </div>
             </div>
           </div>
+          <div style="width: 400px;">
+            <button class="button" @click="move(1)"><i class="right-arrow"></i></button>
+          </div>
         </div>
-        <div style="width: 400px;">
-          <button class="button" @click="move(1)">
-            <i class="right-arrow"></i>
-          </button>
-        </div>
+        <input class="input" type="text" placeholder="Szukaj" v-model="phrase" @input="debounceInput()">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import EventBus from "@/EventBus.js";
-import debounce from "debounce";
+  import EventBus from "@/EventBus.js";
+  import debounce from "debounce";
 
   export default {
     data() {
@@ -213,12 +214,12 @@ import debounce from "debounce";
       fetch(
         `http://localhost:3000/search?category=${this.category}&limit=${
           this.max
-        }&phrase=${this.phrase}`
+          }&phrase=${this.phrase}`
       )
         .then(res => res.json())
         .then(body => {
           this.products = body.map(e => {
-            return Object.assign(e, { category: this.category });
+            return Object.assign(e, {category: this.category});
           });
           this.dialog = true;
         });
@@ -257,137 +258,164 @@ import debounce from "debounce";
     },
     mounted() {
       fetch(`http://localhost:3000/categories`)
-      .then(res => res.json())
-      .then(categories => {
-        this.categories = categories;
-      });
+        .then(res => res.json())
+        .then(categories => {
+          this.categories = categories;
+        });
     }
-};
+  };
 </script>
 
 <style scoped lang="scss">
-:focus {
-  outline: none;
-}
-.theme--light.v-btn:not(.v-btn--icon):not(.v-btn--flat) {
-  background-color: #ff5a00;
-  color: white;
-}
-.product,
-.modal-container {
-  font-family: "Amika", sans-serif;
-}
+  :focus {
+    outline: none;
+  }
 
-.product__details {
-  display: flex;
-  flex-flow: column;
-  text-align: right;
-}
-
-.product__title {
-  font-family: "Amika", sans-serif;
-  text-align: center;
-}
-
-.product__link {
-  text-decoration: none;
-  text-transform: uppercase;
-  font-size: 18px;
-  color: #ff5a00;
-}
-
-.product__price {
-  font-size: 16px;
-}
-
-.v-card__title {
-  font-size: 16px;
-}
-
-.product__title {
-  text-align: center;
-  font-size: 50px;
-}
-
-h2 {
-  text-align: center;
-  font-size: 28px;
-  margin-bottom: 10px;
-}
-
-.modal-container {
-  position: fixed;
-  margin-top: 70px;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.flex-row {
-  display: flex;
-  justify-content: space-around;
-  height: 100%;
-}
-
-.modal {
-  position: fixed;
-  width: 82%;
-  height: 82%;
-  background: transparent;
-  display: flex;
-
-  &__element {
+  .flex-column {
     display: flex;
-    padding: 30px;
     flex-direction: column;
-    justify-content: space-between;
-    border-radius: 10px;
+    width: 100%;
     height: 100%;
-    margin-left: 10px;
-    width: 30%;
-    background: white;
-    cursor: pointer;
+  }
 
-    img {
-      width: 100%;
+  .input {
+    position: fixed;
+    background-color: white;
+    margin: 0 auto;
+    top: 70px;
+    left: 14%;
+    font-size: large;
+    width: 70%;
+    padding: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .theme--light.v-btn:not(.v-btn--icon):not(.v-btn--flat) {
+    background-color: #ff5a00;
+    color: white;
+  }
+
+  .product,
+  .modal-container {
+    font-family: "Amika", sans-serif;
+  }
+
+  .product__details {
+    display: flex;
+    flex-flow: column;
+    text-align: right;
+  }
+
+  .product__title {
+    font-family: "Amika", sans-serif;
+    text-align: center;
+  }
+
+  .product__link {
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 18px;
+  color: #ff5a00;
+  }
+
+  .product__price {
+    font-size: 16px;
+  }
+
+  .v-card__title {
+    font-size: 16px;
+  }
+
+.product__title {
+    text-align: center;
+    font-size: 50px;
+  }
+
+  h2 {
+    text-align: center;
+  font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+.img-container{
+  max-height:350px;
+  overflow: hidden;
+}
+
+  .modal-container {
+    position: fixed;
+    margin-top: 70px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flex-row {
+    display: flex;
+    justify-content: space-around;
+    height: 100%;
+  }
+
+  .modal {
+    position: fixed;
+  width: 100%;
+  height: 75%;
+  top:150px;
+    background: transparent;
+    display: flex;
+
+    &__element {
+      display: flex;
+      padding: 30px;
+      flex-direction: column;
+      justify-content: space-between;
+      border-radius: 10px;
+      height: 100%;
+      margin-left: 10px;
+      width: 30%;
+      background: white;
+      cursor: pointer;
+
+      img {
+        width: 100%;
+      }
     }
   }
-}
 
-.modal-background {
-  background-color: black;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  opacity: 0.9;
-}
+  .modal-background {
+    background-color: black;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: 0.9;
+  }
 
-.button {
-  height: 100%;
-  width: 100%;
-  background-color: transparent;
-}
+  .button {
+    height: 100%;
+    width: 100%;
+    background-color: transparent;
+  }
 
-i {
-  border: solid white;
-  border-width: 0 10px 10px 0;
-  display: inline-block;
-  padding: 10px;
-}
+  i {
+    border: solid white;
+    border-width: 0 10px 10px 0;
+    display: inline-block;
+    padding: 10px;
+  }
 
-.right-arrow {
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-}
+  .right-arrow {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+  }
 
-.left-arrow {
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-}
+  .left-arrow {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+  }
 </style>
