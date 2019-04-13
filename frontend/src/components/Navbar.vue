@@ -1,6 +1,6 @@
 <template>
-  <v-toolbar class="navbar" fixed color="primary white--text">
-    <h1> PC Builder</h1>
+  <v-toolbar class="navbar" fixed color="white--text">
+    <h1>PC Builder</h1>
     <v-spacer></v-spacer>
     <span class="navbar__price">Suma: {{this.allPrice.toFixed(2)}} zł</span>
   </v-toolbar>
@@ -25,6 +25,9 @@ export default {
 <style scoped lang="scss">
 .navbar {
   font-family: "Amika", sans-serif;
+}
+.theme--light .v-toolbar {
+  background-color: #ff5a00;
 }
 .navbar__price {
   font-size: 24px;

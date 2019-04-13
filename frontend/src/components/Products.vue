@@ -2,7 +2,7 @@
   <div>
     <div class="product">
       <v-container class="my-5">
-        <h2 class="grey--text">Komponenty wymagane</h2>
+        <h2>Komponenty wymagane</h2>
         <v-layout row wrap>
           <v-flex
             xs12
@@ -23,7 +23,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn class="btn" @click="openDialog(true, category.id)">Wybierz</v-btn>
               </v-card-actions>
             </v-card>
             <v-card v-else flat class="text-xs-center ma-3">
@@ -37,7 +37,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn class="btn" @click="openDialog(true, category.id)">Wybierz</v-btn>
                 <v-btn color="secondary" dark @click="remove(category)">Usuń</v-btn>
               </v-card-actions>
             </v-card>
@@ -46,7 +46,7 @@
       </v-container>
 
       <v-container class="my-5">
-        <h2 class="grey--text">Komponenty opcjonalne</h2>
+        <h2>Komponenty opcjonalne</h2>
         <v-layout row wrap>
           <v-flex
             xs12
@@ -67,7 +67,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn class="btn" @click="openDialog(true, category.id)">Wybierz</v-btn>
               </v-card-actions>
             </v-card>
             <v-card v-else flat class="text-xs-center ma-3">
@@ -81,7 +81,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn class="btn" @click="openDialog(true, category.id)">Wybierz</v-btn>
                 <v-btn color="secondary" dark @click="remove(category)">Usuń</v-btn>
               </v-card-actions>
             </v-card>
@@ -95,7 +95,9 @@
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
         <div style="width: 300px;">
-          <button class="button" @click="move(-1)"><i class="left-arrow"></i></button>
+          <button class="button" @click="move(-1)">
+            <i class="left-arrow"></i>
+          </button>
         </div>
         <div class="flex-row">
           <div class="flex-row">
@@ -117,7 +119,9 @@
           </div>
         </div>
         <div style="width: 400px;">
-          <button class="button" @click="move(1)"><i class="right-arrow"></i></button>
+          <button class="button" @click="move(1)">
+            <i class="right-arrow"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -125,96 +129,103 @@
 </template>
 
 <script>
-  import EventBus from "@/EventBus.js";
-  import debounce from 'debounce'
+import EventBus from "@/EventBus.js";
+import debounce from "debounce";
 
-  export default {
-    data() {
-      return {
-        start: 0,
-        amount: 3,
-        max: 21,
-        allPrice: 0,
-        on: true,
-        dialog: false,
-        products: [],
-        categories: [],
-        cart: [],
-        category: null,
-        phrase: ''
-      };
+export default {
+  data() {
+    return {
+      start: 0,
+      amount: 3,
+      max: 21,
+      allPrice: 0,
+      on: true,
+      dialog: false,
+      products: [],
+      categories: [],
+      cart: [],
+      category: null,
+      phrase: ""
+    };
+  },
+  methods: {
+    required: function(array, required) {
+      return array.filter(e => e.required === required);
     },
-    methods: {
-      required: function (array, required) {
-        return array.filter(e => e.required === required);
-      },
-      openDialog(value, id) {
-        if (!value) {
-          this.dialog = false;
-          return;
-        }
-        this.category = id
-        this.loadProducts()
-      },
-      loadProducts() {
-        this.start = 0
-        fetch(`http://localhost:3000/search?category=${this.category}&limit=${this.max}&phrase=${this.phrase}`)
-          .then(res => res.json())
-          .then(body => {
-            this.products = body.map(e => {
-              return Object.assign(e, {category: this.category});
-            });
-            this.dialog = true;
-          });
-      },
-      choose(product) {
-        const category = this.categories.find(e => e.id === product.category)
-        if (!category.product) {
-          this.cart.push(product)
-        } else {
-          const index = this.cart.findIndex(e => e.category === category.id)
-          this.cart[index] = product
-        }
-        this.$set(category, 'product', product)
-        this.openDialog(false);
-        this.priceSum();
-      },
-      priceSum() {
-        this.allPrice = this.cart.reduce((p, c) => p + Number(c.price), 0)
-        EventBus.$emit("priceChange", this.allPrice);
-      },
-      move(direction) {
-        this.start = (this.start + this.max + direction * this.amount) % this.max
-      },
-      slice(array) {
-        return array.slice(this.start, this.start + this.amount)
-      },
-      debounceInput() {
-        debounce(this.loadProducts, 700)()
-      },
-      remove(category) {
-        const index = this.cart.findIndex(e => e.id === category.product.id)
-        this.cart.splice(index, 1)
-        const cat = this.categories.find(e => e.id === category.id)
-        this.$set(cat, 'product', undefined)
-        this.priceSum()
+    openDialog(value, id) {
+      if (!value) {
+        this.dialog = false;
+        return;
       }
+      this.category = id;
+      this.loadProducts();
     },
-    mounted() {
-      fetch(`http://localhost:3000/categories`)
+    loadProducts() {
+      this.start = 0;
+      fetch(
+        `http://localhost:3000/search?category=${this.category}&limit=${
+          this.max
+        }&phrase=${this.phrase}`
+      )
         .then(res => res.json())
-        .then(categories => {
-          this.categories = categories
+        .then(body => {
+          this.products = body.map(e => {
+            return Object.assign(e, { category: this.category });
+          });
+          this.dialog = true;
         });
+    },
+    choose(product) {
+      const category = this.categories.find(e => e.id === product.category);
+      if (!category.product) {
+        this.cart.push(product);
+      } else {
+        const index = this.cart.findIndex(e => e.category === category.id);
+        this.cart[index] = product;
+      }
+      this.$set(category, "product", product);
+      this.openDialog(false);
+      this.priceSum();
+    },
+    priceSum() {
+      this.allPrice = this.cart.reduce((p, c) => p + Number(c.price), 0);
+      EventBus.$emit("priceChange", this.allPrice);
+    },
+    move(direction) {
+      this.start = (this.start + this.max + direction * this.amount) % this.max;
+    },
+    slice(array) {
+      return array.slice(this.start, this.start + this.amount);
+    },
+    debounceInput() {
+      debounce(this.loadProducts, 700)();
+    },
+    remove(category) {
+      const index = this.cart.findIndex(e => e.id === category.product.id);
+      this.cart.splice(index, 1);
+      const cat = this.categories.find(e => e.id === category.id);
+      this.$set(cat, "product", undefined);
+      this.priceSum();
     }
-  };
+  },
+  mounted() {
+    fetch(`http://localhost:3000/categories`)
+      .then(res => res.json())
+      .then(categories => {
+        this.categories = categories;
+      });
+  }
+};
 </script>
 
 <style scoped lang="scss">
-  :focus {
-    outline: none;
-  }
-
+:focus {
+  outline: none;
+}
+.theme--light.v-btn:not(.v-btn--icon):not(.v-btn--flat) {
+  background-color: #ff5a00;
+  color: white;
+}
 .product,
 .modal-container {
   font-family: "Amika", sans-serif;
@@ -235,6 +246,7 @@
   text-decoration: none;
   text-transform: uppercase;
   font-size: 18px;
+  color: #ff5a00;
 }
 
 .product__price {
@@ -245,14 +257,14 @@
   font-size: 16px;
 }
 
-.products__title {
+.product__title {
   text-align: center;
   font-size: 50px;
 }
 
 h2 {
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 10px;
 }
 
@@ -316,7 +328,6 @@ h2 {
 }
 
 i {
-
   border: solid white;
   border-width: 0 10px 10px 0;
   display: inline-block;
@@ -332,5 +343,4 @@ i {
   transform: rotate(135deg);
   -webkit-transform: rotate(135deg);
 }
-
 </style>
