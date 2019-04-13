@@ -173,6 +173,7 @@ export default {
 h2 {
   text-align: center;
   font-size: 24px;
+  margin-bottom: 10px;
 }
 .modal-container {
   position: fixed;

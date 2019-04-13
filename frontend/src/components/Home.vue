@@ -1,16 +1,20 @@
 <template>
   <div class="home">
-    <h1>Strona główna :)</h1>
+    <h2>Witaj PCBuilder</h2>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  }
-};
+export default {};
 </script>
-
 <style scoped lang="scss">
+h2 {
+  margin-top: 100px;
+  font-size: 34px;
+  text-align: center;
+}
+p {
+  text-align: center;
+  font-size: 24px;
+}
 </style>
