@@ -71,7 +71,7 @@
             src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
           ></v-img>
           <v-card-title>
-            <span>Hey yay it's a describe</span>
+            <span>Hey yay it's my name - Slim Shady</span>
           </v-card-title>
           <v-card-actions>
             <v-btn flat color="green">Explore</v-btn>
@@ -177,13 +177,13 @@ h2 {
 }
 .modal {
   position: fixed;
-  width: 80%;
-  height: 80%;
+  width: 70%;
+  height: 67%;
   &__element {
     display: inline-block;
-    //flex-direction: row;
-    width: 33.3%;
-    height: 33.3%;
+    margin-left: 10px;
+    width: 30%;
+    height: 30%;
   }
 }
 .modal-background {
