@@ -62,41 +62,79 @@ router.get('/rekurencja', ensureToken, async (req, res) => {
 })
 
 router.get('/categories', ensureToken, async (req, res) => {
-  try {
-    const url = 'https://api.allegro.pl/sale/categories'
-    const { data: data1 } = await axios.get(url, {
-      params: {
-        'parent.id': '4226'
-      },
-      headers: {
-        Authorization: 'Bearer ' + req.token.access_token,
-        Accept: 'application/vnd.allegro.public.v1+json'
-      }
-    })
-    const { data: data2 } = await axios.get(url, {
-      params: {
-        'parent.id': '4475'
-      },
-      headers: {
-        Authorization: 'Bearer ' + req.token.access_token,
-        Accept: 'application/vnd.allegro.public.v1+json'
-      }
-    })
-    const data = data1.categories.concat(data2.categories).filter(e => {
-      return !['pozostałe', 'serwisowy', 'przenośne', 'kieszenie', 'uszkodzone'].some(r => {
-        return e.name.toLowerCase().includes(r)
-      })
-    })
-    return res.json(data.map(c => {
-      return {
-        id: c.id,
-        name: c.name
-      }
-    }))
-  } catch (error) {
-    console.error('Request error', error.message)
-    return res.json(error.message)
-  }
+ const mockCategories = [
+   {
+     "id": "260019",
+     "name": "Karty graficzne",
+     "required": true
+   },
+   {
+     "id": "259437",
+     "name": "Zasilacze",
+     "required": true
+   },
+   {
+     "id": "257226",
+     "name": "Pamięć RAM",
+     "required": true
+   },
+   {
+     "id": "4228",
+     "name": "Płyty główne",
+     "required": true
+   },
+   {
+     "id": "257222",
+     "name": "Procesory",
+     "required": true
+   },
+   {
+     "id": "4475",
+     "name": "Dyski i pamięci przenośne",
+     "required": true
+   },
+   {
+     "id": "258226",
+     "name": "Systemy operacyjne",
+     "required": false
+   },
+   {
+     "id": "259436",
+     "name": "Obudowy",
+     "required": true
+   },
+   {
+     "id": "260015",
+     "name": "Chłodzenie i tuning",
+     "required": true
+   },
+   {
+     "id": "257260",
+     "name": "Napędy optyczne i nośniki",
+     "required": false
+   },
+   {
+     "id": "260017",
+     "name": "Monitory komputerowe",
+     "required": false
+   },
+   {
+     "id": "259422",
+     "name": "Mikrofony i słuchawki",
+     "required": false
+   },
+   {
+     "id": "4551",
+     "name": "Listwy zasilające i UPS",
+     "required": false
+   },
+   {
+     "id": "260735",
+     "name": "Karty sieciowe",
+     "required": false
+   }
+ ]
+  res.json(mockCategories)
 })
 
 module.exports = router
