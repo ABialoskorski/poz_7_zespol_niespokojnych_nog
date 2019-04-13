@@ -24,7 +24,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wyszukaj</v-btn>
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -202,7 +202,7 @@ export default {
   font-size: 16px;
 }
 .products__title {
-  margin-top: 50px;
+  // margin-top: 50px;
   text-align: center;
   font-size: 50px;
 }
