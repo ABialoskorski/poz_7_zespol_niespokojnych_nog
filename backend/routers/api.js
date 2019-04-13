@@ -4,7 +4,7 @@ const { getLink, processItem } = require('../utils/processItem')
 const router = require('express').Router()
 
 router.get('/', ensureToken, async (req, res) => {
-  res.json(req.token)
+  res.json(req.token.access_token)
 })
 
 router.get('/search', ensureToken, async (req, res) => {
@@ -49,7 +49,7 @@ router.get('/categories', ensureToken, async (req, res) => {
         name: c.name
       }
     }))
-  } catch (error) { 
+  } catch (error) {
     console.error('Request error', error.message)
     return res.json(error.message)
   }
