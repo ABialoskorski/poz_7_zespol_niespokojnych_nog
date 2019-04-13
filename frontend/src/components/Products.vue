@@ -64,7 +64,7 @@
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
-        <div class="modal__element" v-for="product in products" :key="product.id">
+        <div class="modal__element" @click="choose(product)" v-for="product in products" :key="product.id">
           <img :src="product.images[0].url">
           <v-card-title>
             <span>{{product.name}}</span>
@@ -166,15 +166,30 @@ export default {
         return;
       }
       fetch(`http://localhost:3000/search?category=${id}&limit=3`)
-        .then(res => res.json())
-        .then(body => {
-          console.log(body);
-          this.products = body;
-          this.dialog = true;
+      .then(res => res.json())
+      .then(body => {
+        console.log(body);
+        this.products = body.map(e => {
+          return Object.assign(e, { category: id })
         });
+        this.dialog = true
+      })
+    },
+    choose(product) {
+      this.categories.find(e => {
+        return e.id === product.category
+      })
+      this.categories.find(e => e.id === product.category).avatar = product.images[0].url
+      this.openDialog(false)
     }
   },
-  mounted() {}
+  mounted() {
+    fetch(`http://localhost:3000/categories`)
+    .then(res => res.json())
+    .then(categories => {
+      this.categories = categories
+    })
+  }
 };
 </script>
 
