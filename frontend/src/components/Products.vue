@@ -64,14 +64,13 @@
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="dialog=false"></div>
       <v-card class="modal">
-        <v-card class="modal__element" v-for="n in 3" :key="n">
+        <v-card class="modal__element" v-for="product in products" :key="product.id">
           <v-img
             class="white--text"
-            height="400px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            :src="product.images[0].url"
           ></v-img>
           <v-card-title>
-            <span>Hey yay it's my name - Slim Shady</span>
+            <span>{{product.name}}</span>
           </v-card-title>
           <v-card-actions>
             <v-btn flat color="green">Explore</v-btn>
@@ -153,12 +152,13 @@ export default {
     }
   },
   mounted() {
-    fetch("http://localhost:3000/search?phrase=GTX1050", { mode: "cors" })
+    fetch("http://localhost:3000/search?phrase=GTX1050")
       .then(res => {
         return res.json();
       })
       .then(body => {
         console.log(body);
+        this.products = body;
       });
   }
 };
@@ -173,6 +173,7 @@ export default {
 h2 {
   text-align: center;
   font-size: 24px;
+  margin-bottom: 10px;
 }
 .modal-container {
   position: fixed;
