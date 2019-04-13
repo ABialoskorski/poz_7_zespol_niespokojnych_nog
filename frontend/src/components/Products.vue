@@ -140,10 +140,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.product,
+.modal-container {
+  font-family: "Amika", sans-serif;
+}
 .product__details {
   display: flex;
   flex-flow: column;
   text-align: right;
+}
+.product__title {
+  font-family: "Amika", sans-serif;
+  text-align: center;
 }
 .product__link {
   text-decoration: none;

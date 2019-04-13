@@ -23,6 +23,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.navbar {
+  font-family: "Amika", sans-serif;
+}
 .navbar__price {
   font-size: 24px;
   margin-right: 40px;
