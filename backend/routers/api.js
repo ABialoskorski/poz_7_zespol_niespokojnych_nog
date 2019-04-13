@@ -4,7 +4,7 @@ const { getLink, processItem } = require('../utils/processItem')
 const router = require('express').Router()
 
 router.get('/', ensureToken, async (req, res) => {
-  res.json(accessToken)
+  res.json(req.token.access_token)
 })
 
 router.get('/search', ensureToken, async (req, res) => {

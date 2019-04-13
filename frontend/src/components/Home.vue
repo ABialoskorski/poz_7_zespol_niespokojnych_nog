@@ -151,6 +151,13 @@ export default {
     required: function(array, required) {
       return array.filter(e => e.required === required);
     }
+  },
+  mounted() {
+    fetch("http://localhost:3000/search?phrase=GTX1050", {mode: 'cors'}).then(res => {
+      return res.json()
+    }).then(body => {
+      console.log(body)
+    })
   }
 };
 </script>
