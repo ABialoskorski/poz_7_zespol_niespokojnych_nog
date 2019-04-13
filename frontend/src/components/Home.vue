@@ -17,7 +17,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark v-on="on">Wyszukaj</v-btn>
+                <v-btn color="primary" dark @click="dialog = true">Wyszukaj</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -46,16 +46,16 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="primary" dark v-on="on">Wyszukaj</v-btn>
+                <v-btn color="primary" dark>Wyszukaj</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
         </v-layout>
       </v-container>
     </div>
-    <div class="modal-background"></div>
-    <div class="modal-container">
-      <v-card class="modal">
+    <div class="modal-container" v-if="dialog">
+      <div class="modal-background" @click="dialog=false"></div>
+      <v-card class="modal" >
         <v-card-title>title</v-card-title>
         <v-card-text>text</v-card-text>
       </v-card>
@@ -158,18 +158,13 @@
     align-items: center;
   }
 
-  .modal{
+  .modal {
     position: fixed;
     width: 50%;
     height: 50%;
-    /*width: 50%;*/
-    /*height: 50vh;*/
-    /*margin-left: auto;*/
-    /*margin-right: auto;*/
-    /*margin-top: 20vh;*/
   }
 
-  .modal-background{
+  .modal-background {
     background-color: black;
     position: fixed;
     top: 0;
