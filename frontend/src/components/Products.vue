@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="products">
-      <h1 class="products__title">Komponenty</h1>
+    <div class="product">
+      <h1 class="product__title">Komponenty</h1>
       <v-container class="my-5">
         <h2 class="grey--text">Komponenty wymagane</h2>
         <v-layout row wrap>
@@ -69,9 +69,10 @@
           <v-card-title>
             <span>{{product.name}}</span>
           </v-card-title>
-          <v-card-actions>
+          <div class="product__details">
+            <span class="product__price">{{product.price}} zł</span>
             <a class="product__link" :href="product.link">Przeglądaj</a>
-          </v-card-actions>
+          </div>
         </div>
       </div>
     </div>
@@ -178,15 +179,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.product__details {
+  display: flex;
+  flex-flow: column;
+  text-align: right;
+}
 .product__link {
   text-decoration: none;
   text-transform: uppercase;
   font-size: 18px;
 }
+.product__price {
+  font-size: 16px;
+}
 .v-card__title {
   font-size: 16px;
 }
-.products__title {
+.product__title {
   margin-top: 50px;
   text-align: center;
   font-size: 50px;
