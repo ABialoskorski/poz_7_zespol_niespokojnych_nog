@@ -20,7 +20,6 @@
               </v-responsive>
               <v-card-text>
                 <div class="subheading">{{ category.name }}</div>
-                <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
@@ -33,8 +32,10 @@
                 </v-avatar>
               </v-responsive>
               <v-card-text>
+                <div class="subheading">{{ category.product.name }}</div>
+              </v-card-text>
+              <v-card-text>
                 <div class="subheading">{{ category.name }}</div>
-                <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
@@ -64,7 +65,6 @@
               </v-responsive>
               <v-card-text>
                 <div class="subheading">{{ category.name }}</div>
-                <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
@@ -77,8 +77,10 @@
                 </v-avatar>
               </v-responsive>
               <v-card-text>
+                <v-card-text>
+                <div class="subheading">{{ category.product.name }}</div>
+              </v-card-text>
                 <div class="subheading">{{ category.name }}</div>
-                <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
@@ -134,6 +136,7 @@
         start: 0,
         amount: 3,
         max: 21,
+        actualMax: 0,
         allPrice: 0,
         on: true,
         dialog: false,
@@ -164,6 +167,7 @@
             this.products = body.map(e => {
               return Object.assign(e, {category: this.category});
             });
+            this.actualMax = this.products.length
             this.dialog = true;
           });
       },
@@ -184,7 +188,7 @@
         EventBus.$emit("priceChange", this.allPrice);
       },
       move(direction) {
-        this.start = (this.start + this.max + direction * this.amount) % this.max
+        this.start = (this.start + this.actualMax + direction * this.amount) % this.actualMax
       },
       slice(array) {
         return array.slice(this.start, this.start + this.amount)
