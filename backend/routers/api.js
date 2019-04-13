@@ -4,7 +4,7 @@ const { getLink, processItem } = require('../utils/processItem')
 const router = require('express').Router()
 
 router.get('/', ensureToken, async (req, res) => {
-  res.json(req.token.access_token)
+  res.json(req.token)
 })
 
 router.get('/search', ensureToken, async (req, res) => {
@@ -13,8 +13,9 @@ router.get('/search', ensureToken, async (req, res) => {
     const { data } = await axios.get(url, {
       params: {
         phrase: req.query.phrase,
-        offset: 1000,
-        limit: 100,
+        offset: req.query.offset,
+        limit: req.query.limit,
+        'category.id': req.query.category
       },
       headers: {
         Authorization: 'Bearer ' + req.token.access_token,
@@ -24,6 +25,30 @@ router.get('/search', ensureToken, async (req, res) => {
     const promoted = data.items.promoted.map(processItem)
     const regular = data.items.regular.map(processItem)
     return res.json(promoted.concat(regular))
+  } catch (error) { 
+    console.error('Request error', error.message)
+    return res.json(error.message)
+  }
+})
+
+router.get('/categories', ensureToken, async (req, res) => {
+  try {
+    const url = 'https://api.allegro.pl/sale/categories'
+    const { data } = await axios.get(url, {
+      params: {
+        'parent.id': '4226'
+      },
+      headers: {
+        Authorization: 'Bearer ' + req.token.access_token,
+        Accept: 'application/vnd.allegro.public.v1+json'
+      }
+    })
+    return res.json(data.categories.map(c => {
+      return {
+        id: c.id,
+        name: c.name
+      }
+    }))
   } catch (error) { 
     console.error('Request error', error.message)
     return res.json(error.message)
