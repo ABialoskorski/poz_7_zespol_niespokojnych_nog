@@ -70,8 +70,7 @@
             <span>{{product.name}}</span>
           </v-card-title>
           <v-card-actions>
-            <a :href="product.link">Explode</a>
-            <v-btn flat color="green">Explore</v-btn>
+            <a class="product__link" :href="product.link">Przeglądaj</a>
           </v-card-actions>
         </div>
       </div>
@@ -162,8 +161,8 @@ export default {
     },
     openDialog(value, id) {
       if (!value) {
-        this.dialog = false
-        return 
+        this.dialog = false;
+        return;
       }
       fetch(`http://localhost:3000/search?category=${id}&limit=3`)
       .then(res => res.json())
@@ -194,6 +193,14 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.product__link {
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+.v-card__title {
+  font-size: 16px;
+}
 .products__title {
   margin-top: 50px;
   text-align: center;
@@ -206,6 +213,7 @@ h2 {
 }
 .modal-container {
   position: fixed;
+  margin-top: 70px;
   top: 0;
   bottom: 0;
   right: 0;
@@ -216,12 +224,11 @@ h2 {
 }
 .modal {
   position: fixed;
-  width: 90%;
-  height: 90%;
+  width: 82%;
+  height: 82%;
   display: flex;
   justify-content: space-around;
   background: transparent;
-  // padding: 30px;
   &__element {
     display: flex;
     padding: 30px;
@@ -233,7 +240,6 @@ h2 {
     width: 30%;
     background: white;
     cursor: pointer;
-    // height: 30%;
     img {
       width: 100%;
     }
