@@ -94,74 +94,7 @@ export default {
       on: true,
       dialog: false,
       products: [],
-      categories: [
-        {
-          name: "GPU",
-          description: "Karta Graficzna",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "CPU",
-          description: "Procesor",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "PSU",
-          description: "Zasilacz",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "MOBO",
-          description: "Płyta Główna",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "RAM",
-          description: "Pamięć RAM",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "CASE",
-          description: "Obudowa",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "DISK",
-          description: "Dysk HDD/SSD",
-          id: 260019,
-          required: true
-        },
-        {
-          name: "OS",
-          description: "System operacyjny",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "CD/DVD",
-          description: "Napęd optyczny",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "Wi-fi/Ethernet",
-          description: "Karta sieciowa",
-          id: 260019,
-          required: false
-        },
-        {
-          name: "CPU Cooler",
-          description: "Chłodzenie CPU",
-          id: 260019,
-          required: false
-        }
-      ]
+      categories: []
     };
   },
   methods: {
