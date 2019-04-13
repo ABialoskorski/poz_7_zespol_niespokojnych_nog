@@ -1,5 +1,5 @@
 <template>
-  <v-toolbar fixed color="primary white--text">
+  <v-toolbar class="navbar" fixed color="primary white--text">
     <v-btn fab small :to="{
         name: 'home'
         }">
@@ -38,5 +38,9 @@ export default {
 }
 .v-btn {
   font-size: 16px;
+}
+.navbar {
+  position: sticky;
+  top: 0;
 }
 </style>
