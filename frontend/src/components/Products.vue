@@ -63,12 +63,9 @@
 
     <div class="modal-container" v-if="dialog">
       <div class="modal-background" @click="openDialog(false)"></div>
-      <v-card class="modal">
-        <v-card class="modal__element" v-for="product in products" :key="product.id">
-          <v-img
-            class="white--text"
-            :src="product.images[0].url"
-          ></v-img>
+      <div class="modal">
+        <div class="modal__element" v-for="product in products" :key="product.id">
+          <img :src="product.images[0].url">
           <v-card-title>
             <span>{{product.name}}</span>
           </v-card-title>
@@ -76,8 +73,8 @@
             <a :href="product.link">Explode</a>
             <v-btn flat color="green">Explore</v-btn>
           </v-card-actions>
-        </v-card>
-      </v-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -205,13 +202,27 @@ h2 {
 }
 .modal {
   position: fixed;
-  width: 70%;
-  height: 67%;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: space-around;
+  background: transparent;
+  // padding: 30px;
   &__element {
-    display: inline-block;
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    height: 100%;
     margin-left: 10px;
     width: 30%;
-    height: 30%;
+    background: white;
+    cursor: pointer;
+    // height: 30%;
+    img {
+      width: 100%;
+    }
   }
 }
 .modal-background {
