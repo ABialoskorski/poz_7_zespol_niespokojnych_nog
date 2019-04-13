@@ -24,7 +24,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="dialog = true">Wyszukaj</v-btn>
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wyszukaj</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -53,7 +53,7 @@
                 <div class="grey--text">{{ category.description }}</div>
               </v-card-text>
               <v-card-actions class="right">
-                <v-btn color="primary" dark @click="dialog = true">Wyszukaj</v-btn>
+                <v-btn color="primary" dark @click="openDialog(true, category.id)">Wyszukaj</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -62,21 +62,19 @@
     </div>
 
     <div class="modal-container" v-if="dialog">
-      <div class="modal-background" @click="dialog=false"></div>
-      <v-card class="modal">
-        <v-card class="modal__element" v-for="product in products" :key="product.id">
-          <v-img
-            class="white--text"
-            :src="product.images[0].url"
-          ></v-img>
+      <div class="modal-background" @click="openDialog(false)"></div>
+      <div class="modal">
+        <div class="modal__element" v-for="product in products" :key="product.id">
+          <img :src="product.images[0].url">
           <v-card-title>
             <span>{{product.name}}</span>
           </v-card-title>
           <v-card-actions>
+            <a :href="product.link">Explode</a>
             <v-btn flat color="green">Explore</v-btn>
           </v-card-actions>
-        </v-card>
-      </v-card>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -87,60 +85,72 @@ export default {
     return {
       on: true,
       dialog: false,
+      products: [],
       categories: [
         {
           name: "GPU",
           description: "Karta Graficzna",
+          id: 260019,
           required: true
         },
         {
           name: "CPU",
           description: "Procesor",
+          id: 260019,
           required: true
         },
         {
           name: "PSU",
           description: "Zasilacz",
+          id: 260019,
           required: true
         },
         {
           name: "MOBO",
           description: "Płyta Główna",
+          id: 260019,
           required: true
         },
         {
           name: "RAM",
           description: "Pamięć RAM",
+          id: 260019,
           required: true
         },
         {
           name: "CASE",
           description: "Obudowa",
+          id: 260019,
           required: true
         },
         {
           name: "DISK",
           description: "Dysk HDD/SSD",
+          id: 260019,
           required: true
         },
         {
           name: "OS",
           description: "System operacyjny",
+          id: 260019,
           required: false
         },
         {
           name: "CD/DVD",
           description: "Napęd optyczny",
+          id: 260019,
           required: false
         },
         {
           name: "Wi-fi/Ethernet",
           description: "Karta sieciowa",
+          id: 260019,
           required: false
         },
         {
           name: "CPU Cooler",
           description: "Chłodzenie CPU",
+          id: 260019,
           required: false
         }
       ]
@@ -149,17 +159,22 @@ export default {
   methods: {
     required: function(array, required) {
       return array.filter(e => e.required === required);
-    }
-  },
-  mounted() {
-    fetch("http://localhost:3000/search?phrase=GTX1050")
-      .then(res => {
-        return res.json();
-      })
+    },
+    openDialog(value, id) {
+      if (!value) {
+        this.dialog = false
+        return 
+      }
+      fetch(`http://localhost:3000/search?category=${id}&limit=3`)
+      .then(res => res.json())
       .then(body => {
         console.log(body);
         this.products = body;
-      });
+        this.dialog = true
+      })
+    }
+  },
+  mounted() {
   }
 };
 </script>
@@ -187,13 +202,27 @@ h2 {
 }
 .modal {
   position: fixed;
-  width: 70%;
-  height: 67%;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: space-around;
+  background: transparent;
+  // padding: 30px;
   &__element {
-    display: inline-block;
+    display: flex;
+    padding: 30px;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 10px;
+    height: 100%;
     margin-left: 10px;
     width: 30%;
-    height: 30%;
+    background: white;
+    cursor: pointer;
+    // height: 30%;
+    img {
+      width: 100%;
+    }
   }
 }
 .modal-background {
