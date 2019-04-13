@@ -24,6 +24,7 @@
               </v-card-text>
               <v-card-actions class="right">
                 <v-btn color="primary" dark @click="openDialog(true, category.id)">Wybierz</v-btn>
+                <v-btn color="secondary" dark @click="remove(true, category.id)">Usuń</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -61,10 +62,10 @@
     </div>
 
     <div class="modal-container" v-if="dialog">
+      <input class="button" type="text" v-model="phrase" @input="debounceInput()">
       <div class="modal-background" @click="openDialog(false)"></div>
       <div class="modal">
-        <!--<input class="button" type="text" v-model="phrase" @input="debounceInput()">-->
-        <div>
+        <div style="width: 300px;">
           <button class="button" @click="move(-1)"><i class="left-arrow"></i></button>
         </div>
         <div class="flex-row">
@@ -81,12 +82,12 @@
               </v-card-title>
               <div class="product__details">
                 <span class="product__price">{{product.price}} zł</span>
-                <a class="product__link" :href="product.link">Przeglądaj</a>
+                <a class="product__link" :href="product.link" target="_blank">Przeglądaj</a>
               </div>
             </div>
           </div>
         </div>
-        <div>
+        <div style="width: 400px;">
           <button class="button" @click="move(1)"><i class="right-arrow"></i></button>
         </div>
       </div>
